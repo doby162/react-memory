@@ -2,6 +2,10 @@ import logo from "./logo.svg";
 import "./App.css";
 import * as _ from "lodash";
 
+function card(name) {
+  return <img src={"/images/" + name[0] + "_of_" + name[1] + ".svg"}></img>;
+}
+
 function App() {
   let cardNumbers = _.range(1, 14);
   let deck = cardNumbers
@@ -17,7 +21,7 @@ function App() {
   return (
     <div className="App">
       {cards.map((element, index) => {
-        return <p>{element}</p>;
+        return card(element);
       })}
     </div>
   );
