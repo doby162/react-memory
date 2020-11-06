@@ -3,13 +3,19 @@ import "./App.css";
 import * as _ from "lodash";
 import React, { useState } from "react";
 
-function card(name, solvedCards, activeCards) {
+function card(name, solvedCards, activeCard, setActiveCard) {
+  let onclick = () => setActiveCard(name);
   if (solvedCards.includes(name)) {
-    return <img src="/images/back_overlay.png"></img>;
-  } else if (activeCards.includes(name)) {
-    return <img src={"/images/" + name[0] + "_of_" + name[1] + ".svg"}></img>;
+    return <img onClick={onclick} src="/images/back_overlay.png"></img>;
+  } else if (activeCard.length > 1 && 0 == _.difference(activeCard, name)) {
+    return (
+      <img
+        onClick={onclick}
+        src={"/images/" + name[0] + "_of_" + name[1] + ".svg"}
+      ></img>
+    );
   } else {
-    return <img src={"/images/back.png"}></img>;
+    return <img onClick={onclick} src={"/images/back.png"}></img>;
   }
 }
 
@@ -21,17 +27,18 @@ function App() {
     .concat(cardNumbers);
   let suites = ["clubs", "diamonds", "hearts", "spades"];
   let cards = deck.map((element, index) => {
-    console.log([element, suites[index % suites.length]]);
     return [element, suites[index % suites.length]];
   });
 
   let [solvedCards, setSolvedCards] = useState([]);
-  let [activeCards, setActiveCards] = useState([]);
+  let [activeCard, setActiveCard] = useState([]);
+
+  console.log(activeCard);
 
   return (
     <div className="App">
       {cards.map((element, index) => {
-        return card(element, solvedCards, activeCards);
+        return card(element, solvedCards, activeCard, setActiveCard);
       })}
     </div>
   );
