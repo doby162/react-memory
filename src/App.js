@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import * as _ from "lodash";
 
 function App() {
+  let cardNumbers = _.range(1, 14);
+  let deck = cardNumbers
+    .concat(cardNumbers)
+    .concat(cardNumbers)
+    .concat(cardNumbers);
+  let suites = ["clubs", "diamonds", "hearts", "spades"];
+  let cards = deck.map((element, index) => {
+    console.log([element, suites[index % suites.length]]);
+    return [element, suites[index % suites.length]];
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {cards.map((element, index) => {
+        return <p>{element}</p>;
+      })}
     </div>
   );
 }
