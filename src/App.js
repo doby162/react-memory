@@ -1,9 +1,16 @@
 import logo from "./logo.svg";
 import "./App.css";
 import * as _ from "lodash";
+import React, { useState } from "react";
 
-function card(name) {
-  return <img src={"/images/" + name[0] + "_of_" + name[1] + ".svg"}></img>;
+function card(name, solvedCards, activeCards) {
+  if (solvedCards.includes(name)) {
+    return <img src="/images/back_overlay.png"></img>;
+  } else if (activeCards.includes(name)) {
+    return <img src={"/images/" + name[0] + "_of_" + name[1] + ".svg"}></img>;
+  } else {
+    return <img src={"/images/back.png"}></img>;
+  }
 }
 
 function App() {
@@ -18,10 +25,13 @@ function App() {
     return [element, suites[index % suites.length]];
   });
 
+  let [solvedCards, setSolvedCards] = useState([]);
+  let [activeCards, setActiveCards] = useState([]);
+
   return (
     <div className="App">
       {cards.map((element, index) => {
-        return card(element);
+        return card(element, solvedCards, activeCards);
       })}
     </div>
   );
