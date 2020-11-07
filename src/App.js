@@ -1,13 +1,19 @@
 import logo from "./logo.svg";
 import "./App.css";
 import * as _ from "lodash";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function card(name, solvedCards, activeCard, setActiveCard) {
-  let onclick = () => setActiveCard(name);
+function card(name, solvedCards, activeCards, setActiveCards, tmpCards) {
+  let nameSquished = name[0] + name[1];
+  let onclick = () =>
+    setActiveCards((existing) => existing.concat(nameSquished));
+  console.log(tmpCards);
   if (solvedCards.includes(name)) {
     return <img onClick={onclick} src="/images/back_overlay.png"></img>;
-  } else if (activeCard.length > 1 && 0 == _.difference(activeCard, name)) {
+  } else if (
+    activeCards.includes(nameSquished) ||
+    tmpCards.includes(nameSquished)
+  ) {
     return (
       <img
         onClick={onclick}
@@ -31,14 +37,27 @@ function App() {
   });
 
   let [solvedCards, setSolvedCards] = useState([]);
-  let [activeCard, setActiveCard] = useState([]);
-
-  console.log(activeCard);
+  let [activeCards, setActiveCards] = useState([]);
+  let [tmpCards, setTmpCards] = useState([]);
+  useEffect(() => {
+    if (activeCards.length == 2) {
+      setTmpCards(activeCards);
+      setActiveCards([]);
+    } else if (activeCards.length == 1) {
+      setTmpCards([]);
+    }
+  }, [activeCards]);
 
   return (
     <div className="App">
       {cards.map((element, index) => {
-        return card(element, solvedCards, activeCard, setActiveCard);
+        return card(
+          element,
+          solvedCards,
+          activeCards,
+          setActiveCards,
+          tmpCards
+        );
       })}
     </div>
   );
