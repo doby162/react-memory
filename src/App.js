@@ -5,8 +5,13 @@ import React, { useState, useEffect } from "react";
 
 function card(name, solvedCards, activeCards, setActiveCards, tmpCards) {
   let nameSquished = name[0] + name[1];
-  let onclick = () =>
-    setActiveCards((existing) => existing.concat(nameSquished));
+  let onclick = () => {
+    if (
+      !solvedCards.includes(nameSquished) &&
+      !activeCards.includes(nameSquished)
+    )
+      setActiveCards((existing) => existing.concat(nameSquished));
+  };
 
   if (solvedCards.includes(nameSquished)) {
     return <img onClick={onclick} src="/images/back_overlay.png"></img>;
