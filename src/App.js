@@ -7,8 +7,8 @@ function card(name, solvedCards, activeCards, setActiveCards, tmpCards) {
   let nameSquished = name[0] + name[1];
   let onclick = () =>
     setActiveCards((existing) => existing.concat(nameSquished));
-  console.log(tmpCards);
-  if (solvedCards.includes(name)) {
+
+  if (solvedCards.includes(nameSquished)) {
     return <img onClick={onclick} src="/images/back_overlay.png"></img>;
   } else if (
     activeCards.includes(nameSquished) ||
@@ -39,9 +39,14 @@ function App() {
   let [solvedCards, setSolvedCards] = useState([]);
   let [activeCards, setActiveCards] = useState([]);
   let [tmpCards, setTmpCards] = useState([]);
+  let [attempts, setAttempts] = useState(0);
   useEffect(() => {
     if (activeCards.length == 2) {
+      setAttempts((i) => i + 1);
       setTmpCards(activeCards);
+      if (parseInt(activeCards[0]) == parseInt(activeCards[1])) {
+        setSolvedCards(solvedCards.concat(activeCards));
+      }
       setActiveCards([]);
     } else if (activeCards.length == 1) {
       setTmpCards([]);
@@ -50,6 +55,11 @@ function App() {
 
   return (
     <div className="App">
+      {solvedCards.length == deck.length ? (
+        <p>Victory! {attempts} attempts used.</p>
+      ) : (
+        <p>{attempts} attempts used so far</p>
+      )}
       {cards.map((element, index) => {
         return card(
           element,
