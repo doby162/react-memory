@@ -14,19 +14,22 @@ function card(name, solvedCards, activeCards, setActiveCards, tmpCards) {
   };
 
   if (solvedCards.includes(nameSquished)) {
-    return <img onClick={onclick} src="/images/back_overlay.png"></img>;
+    return (
+      <img class="card" onClick={onclick} src="/images/back_overlay.png"></img>
+    );
   } else if (
     activeCards.includes(nameSquished) ||
     tmpCards.includes(nameSquished)
   ) {
     return (
       <img
+        class="card"
         onClick={onclick}
         src={"/images/" + name[0] + "_of_" + name[1] + ".svg"}
       ></img>
     );
   } else {
-    return <img onClick={onclick} src={"/images/back.png"}></img>;
+    return <img class="card" onClick={onclick} src={"/images/back.png"}></img>;
   }
 }
 
@@ -37,9 +40,13 @@ function App() {
     .concat(cardNumbers)
     .concat(cardNumbers);
   let suites = ["clubs", "diamonds", "hearts", "spades"];
-  let cards = deck.map((element, index) => {
-    return [element, suites[index % suites.length]];
-  });
+  let [cards, updateCards] = useState(
+    _.shuffle(
+      deck.map((element, index) => {
+        return [element, suites[index % suites.length]];
+      })
+    )
+  );
 
   let [solvedCards, setSolvedCards] = useState([]);
   let [activeCards, setActiveCards] = useState([]);
@@ -65,15 +72,17 @@ function App() {
       ) : (
         <p>{attempts} attempts used so far</p>
       )}
-      {cards.map((element, index) => {
-        return card(
-          element,
-          solvedCards,
-          activeCards,
-          setActiveCards,
-          tmpCards
-        );
-      })}
+      <div class="card-container">
+        {cards.map((element, index) => {
+          return card(
+            element,
+            solvedCards,
+            activeCards,
+            setActiveCards,
+            tmpCards
+          );
+        })}
+      </div>
     </div>
   );
 }
