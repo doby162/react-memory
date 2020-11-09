@@ -52,6 +52,12 @@ function App() {
   let [activeCards, setActiveCards] = useState([]);
   let [tmpCards, setTmpCards] = useState([]);
   let [attempts, setAttempts] = useState(0);
+  let [highScore, setHighScore] = useState("0");
+
+  fetch("http://localhost:8000/")
+    .then((res) => res.json())
+    .then((result) => setHighScore(result));
+
   useEffect(() => {
     if (activeCards.length == 2) {
       setAttempts((i) => i + 1);
@@ -63,10 +69,16 @@ function App() {
     } else if (activeCards.length == 1) {
       setTmpCards([]);
     }
+    if (solvedCards.length == deck.length) {
+      fetch("http://localhost:8000/" + attempts)
+        .then((res) => res.json())
+        .then((result) => console.log(result));
+    }
   }, [activeCards]);
 
   return (
     <div className="App">
+      <p>Current high score: {highScore} </p>
       {solvedCards.length == deck.length ? (
         <p>Victory! {attempts} attempts used.</p>
       ) : (
